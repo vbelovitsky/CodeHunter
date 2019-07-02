@@ -3,7 +3,11 @@ package com.kotlin.vbel.codehunter;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+<<<<<<< HEAD
 import android.database.Cursor;
+=======
+import android.graphics.Bitmap;
+>>>>>>> 9d435e94720d579c11ca7ad5e7e2a1bef9a01055
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
@@ -13,8 +17,18 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+<<<<<<< HEAD
 import android.widget.ImageView;
+=======
+import android.util.SparseArray;
+import android.view.View;
+import android.widget.FrameLayout;
+>>>>>>> 9d435e94720d579c11ca7ad5e7e2a1bef9a01055
 import android.widget.TextView;
+import android.widget.Toast;
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.text.TextBlock;
+import com.google.android.gms.vision.text.TextRecognizer;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,6 +60,11 @@ public class ImageActivity extends Activity {
         }
     }
 
+<<<<<<< HEAD
+=======
+    Uri contentURI;
+
+>>>>>>> 9d435e94720d579c11ca7ad5e7e2a1bef9a01055
     private void imageFromCamera() {
         dispatchTakePictureIntent();
     }
@@ -65,10 +84,18 @@ public class ImageActivity extends Activity {
             currentPhotoPath = selectedImage.getPath();
             currentPhotoPath = currentPhotoPath.replace("/raw/","");
         }
+<<<<<<< HEAD
         else if (requestCode == CAMERA && data != null && resultCode == RESULT_OK){
             Uri selectedImage = data.getData();
             currentPhotoPath = selectedImage.getPath();
             galleryAddPic();
+=======
+        if (requestCode == GALLERY ){
+            if (data != null) {
+                contentURI = data.getData();
+                currentPhotoPath = contentURI.getPath();
+            }
+>>>>>>> 9d435e94720d579c11ca7ad5e7e2a1bef9a01055
         }
 
         TextView test = findViewById(R.id.test);
@@ -124,4 +151,31 @@ public class ImageActivity extends Activity {
         this.sendBroadcast(mediaScanIntent);
     }
 
+<<<<<<< HEAD
+=======
+    public String text;
+    public void getTextFromImage(View view) throws IOException {
+
+
+        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
+        TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
+        if(!textRecognizer.isOperational()){
+            Toast.makeText(getApplicationContext(), "could not get the Text", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Frame frame = new Frame.Builder().setBitmap(bitmap).build();
+
+            SparseArray<TextBlock> items = textRecognizer.detect(frame);
+            StringBuilder sb = new StringBuilder();
+            for(int i = 0; i < items.size(); ++i){
+                TextBlock myItem = items.valueAt(i);
+                sb.append(myItem.getValue());
+                sb.append("\n");
+            }
+
+            text = sb.toString() ;
+        }
+    }
+
+>>>>>>> 9d435e94720d579c11ca7ad5e7e2a1bef9a01055
 }

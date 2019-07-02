@@ -17,10 +17,14 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
+<<<<<<< HEAD
 
         <activity android:name=".ImageActivity">
         </activity>
 
+=======
+        <activity android:name=".ImageActivity"/>
+>>>>>>> 9d435e94720d579c11ca7ad5e7e2a1bef9a01055
         <provider
                 android:name="android.support.v4.content.FileProvider"
                 android:authorities="com.example.android.fileprovider"
