@@ -16,11 +16,7 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".ImageActivity">
-        </activity>
-        <activity android:name=".Camera">
-        </activity>
-
+        <activity android:name=".ImageActivity"/>
         <provider
                 android:name="android.support.v4.content.FileProvider"
                 android:authorities="com.example.android.fileprovider"
