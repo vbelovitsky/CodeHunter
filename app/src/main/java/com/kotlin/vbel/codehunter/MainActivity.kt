@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
         //cameraButton.setOnClickListener({
         //    val REQUEST_IMAGE_CAPTURE = 1
-//
+        //
         //    fun dispatchTakePictureIntent() {
         //        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
         //            takePictureIntent.resolveActivity(packageManager)?.also {
@@ -30,5 +30,11 @@ class MainActivity : AppCompatActivity() {
         //})
 
 
+        //region: Gallery
+        galleryButton.setOnClickListener(View.OnClickListener {
+            val intent = Intent(this, Gallery::class.java)
+            startActivity(intent)
+        })
+        //endregion
     }
 }
