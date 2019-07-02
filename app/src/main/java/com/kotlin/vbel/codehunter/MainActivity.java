@@ -1,22 +1,22 @@
 package com.kotlin.vbel.codehunter;
 
+import android.app.Activity;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import androidx.core.content.FileProvider;
 import pub.devrel.easypermissions.EasyPermissions;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     private static int GALLERY = 2;
     private static int CAMERA = 3;
@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image);
+        setContentView(R.layout.activity_main);
 
 
         ImageButton cameraButton = findViewById(R.id.imageButtonCamera);
@@ -68,22 +68,23 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == GALLERY && data != null && resultCode == RESULT_OK){
-            Uri selectedImage = data.getData();
-            currentPhotoPath = selectedImage.getPath();
-            currentPhotoPath = currentPhotoPath.replace("/raw/","");
+        if (resultCode != RESULT_CANCELED){
+            if (requestCode == GALLERY && data != null && resultCode == RESULT_OK){
+                Uri selectedImage = data.getData();
+                currentPhotoPath = selectedImage.getPath();
+                currentPhotoPath = currentPhotoPath.replace("/raw/","");
+            }
+
+            else if (requestCode == CAMERA && data != null && resultCode == RESULT_OK){
+                galleryAddPic();
+            }
+
+            Intent imageActivityIntent = new Intent(this, ImageActivity.class);
+            imageActivityIntent.putExtra("imageURI", currentPhotoPath);
+            startActivity(imageActivityIntent);
+
+            System.gc();
         }
-
-        else if (requestCode == CAMERA && data != null && resultCode == RESULT_OK){
-            Uri selectedImage = data.getData();
-            currentPhotoPath = selectedImage.getPath();
-            galleryAddPic();
-
-        }
-
-        Intent imageActivityIntent = new Intent(this, ImageActivity.class);
-        imageActivityIntent.putExtra("imageURI", currentPhotoPath);
-        startActivity(imageActivityIntent);
 
     }
 
@@ -132,6 +133,16 @@ public class MainActivity extends AppCompatActivity {
         this.sendBroadcast(mediaScanIntent);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        System.gc();
+    }
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        System.gc();
+    }
 
 }
