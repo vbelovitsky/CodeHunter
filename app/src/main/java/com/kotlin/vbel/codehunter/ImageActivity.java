@@ -1,12 +1,19 @@
 package com.kotlin.vbel.codehunter;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
@@ -14,12 +21,12 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class ImageActivity extends AppCompatActivity {
+public class ImageActivity extends Activity {
 
-    static final int GALLERY = 0;
-    static final int CAMERA = 1;
+    private static int GALLERY = 2;
+    private static int CAMERA = 3;
 
-    String currentPhotoPath = "";
+    private String currentPhotoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,18 +34,17 @@ public class ImageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_image);
 
         TextView test = findViewById(R.id.test);
+        ImageView image = findViewById(R.id.testImage);
 
         int buttonClicked = getIntent().getIntExtra("buttonClicked", 0);
+
         if (buttonClicked == CAMERA){
             imageFromCamera();
-            test.setText(currentPhotoPath);
         }
         else if(buttonClicked == GALLERY){
             imageFromGallery();
-            test.setText(currentPhotoPath);
         }
     }
-
 
     private void imageFromCamera() {
         dispatchTakePictureIntent();
@@ -52,17 +58,25 @@ public class ImageActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == this.RESULT_CANCELED) {
-            return;
+
+        if (requestCode == GALLERY && data != null && resultCode == RESULT_OK){
+            Uri selectedImage = data.getData();
+            currentPhotoPath = selectedImage.getPath();
+            currentPhotoPath = currentPhotoPath.replace("/raw/","");
         }
-        if (requestCode == GALLERY ){
-            if (data != null) {
-                Uri contentURI = data.getData();
-                currentPhotoPath = contentURI.getPath();
-            }
+        else if (requestCode == CAMERA && data != null && resultCode == RESULT_OK){
+            Uri selectedImage = data.getData();
+            currentPhotoPath = selectedImage.getPath();
+            galleryAddPic();
         }
+
+        TextView test = findViewById(R.id.test);
+        test.setText(currentPhotoPath);
+
+        ImageView image = findViewById(R.id.testImage);
+        image.setImageBitmap(BitmapFactory.decodeFile(currentPhotoPath));
+
     }
 
     private File createImageFile() throws IOException {
@@ -71,9 +85,9 @@ public class ImageActivity extends AppCompatActivity {
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
+                imageFileName,
+                ".jpg",
+                storageDir
         );
 
         currentPhotoPath = image.getAbsolutePath();
@@ -82,16 +96,16 @@ public class ImageActivity extends AppCompatActivity {
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
+
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
+
             File photoFile = null;
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
                 return;
             }
-            // Continue only if the File was successfully created
+
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(this,
                         "com.example.android.fileprovider",
@@ -109,6 +123,5 @@ public class ImageActivity extends AppCompatActivity {
         mediaScanIntent.setData(contentUri);
         this.sendBroadcast(mediaScanIntent);
     }
-
 
 }

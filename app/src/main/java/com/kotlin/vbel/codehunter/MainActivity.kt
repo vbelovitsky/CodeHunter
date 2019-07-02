@@ -1,6 +1,8 @@
 package com.kotlin.vbel.codehunter
 
+import android.Manifest
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -13,11 +15,17 @@ import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import pub.devrel.easypermissions.EasyPermissions
+import android.Manifest.permission
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
+
+
 
 class MainActivity : AppCompatActivity() {
 
-    internal val GALLERY = 0
-    internal val CAMERA = 1
+    internal val GALLERY = 2
+    internal val CAMERA = 3
 
 
     //endregion
@@ -40,6 +48,17 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("buttonClicked", GALLERY)
             startActivity(intent)
         })
+
+        val galleryPermissions =
+            arrayOf<String>(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+        if (!EasyPermissions.hasPermissions(this, *galleryPermissions)) {
+            EasyPermissions.requestPermissions(
+                this, "Access for storage",
+                101, *galleryPermissions
+            )
+        }
+
 
     }
 
