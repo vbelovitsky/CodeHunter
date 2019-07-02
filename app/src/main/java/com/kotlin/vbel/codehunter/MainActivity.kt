@@ -2,23 +2,12 @@ package com.kotlin.vbel.codehunter
 
 import android.Manifest
 import android.content.Intent
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
-import android.support.v4.content.FileProvider
 import android.view.View
 import android.widget.ImageButton
-import java.io.File
-import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.*
 import pub.devrel.easypermissions.EasyPermissions
-import android.Manifest.permission
-import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
+
 
 
 
