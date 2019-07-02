@@ -75,7 +75,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         val cameraButton = findViewById<ImageButton>(R.id.imageButtonCamera)
 
         val galleryButton = findViewById<ImageButton>(R.id.imageButtonGallery)
