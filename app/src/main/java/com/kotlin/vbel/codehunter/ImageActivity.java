@@ -16,8 +16,8 @@ import java.util.Date;
 
 public class ImageActivity extends AppCompatActivity {
 
-    static final int RESULT_GALLERY = 0;
-    static final int RESULT_CAMERA = 1;
+    static final int GALLERY = 0;
+    static final int CAMERA = 1;
 
     String currentPhotoPath = "";
 
@@ -29,11 +29,11 @@ public class ImageActivity extends AppCompatActivity {
         TextView test = findViewById(R.id.test);
 
         int buttonClicked = getIntent().getIntExtra("buttonClicked", 0);
-        if (buttonClicked == RESULT_CAMERA){
+        if (buttonClicked == CAMERA){
             imageFromCamera();
             test.setText(currentPhotoPath);
         }
-        else if(buttonClicked == RESULT_GALLERY){
+        else if(buttonClicked == GALLERY){
             imageFromGallery();
             test.setText(currentPhotoPath);
         }
@@ -41,14 +41,13 @@ public class ImageActivity extends AppCompatActivity {
 
 
     private void imageFromCamera() {
-        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, RESULT_CAMERA);
+        dispatchTakePictureIntent();
     }
 
     public void imageFromGallery() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(galleryIntent, RESULT_GALLERY);
+        startActivityForResult(galleryIntent, GALLERY);
     }
 
     @Override
@@ -58,13 +57,7 @@ public class ImageActivity extends AppCompatActivity {
         if (resultCode == this.RESULT_CANCELED) {
             return;
         }
-        if (requestCode == RESULT_CAMERA) {
-            try {
-                createImageFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (requestCode == RESULT_GALLERY) {
+        if (requestCode == GALLERY ){
             if (data != null) {
                 Uri contentURI = data.getData();
                 currentPhotoPath = contentURI.getPath();
@@ -72,16 +65,41 @@ public class ImageActivity extends AppCompatActivity {
         }
     }
 
-    private void createImageFile() throws IOException {
+    private File createImageFile() throws IOException {
+        // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
-                imageFileName,
-                ".jpg",
-                storageDir
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
         );
+
         currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                return;
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.android.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, CAMERA);
+            }
+        }
     }
 
     private void galleryAddPic() {

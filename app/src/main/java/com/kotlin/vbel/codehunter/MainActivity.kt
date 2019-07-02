@@ -16,8 +16,8 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-    internal val RESULT_GALLERY = 0
-    internal val RESULT_CAMERA = 1
+    internal val GALLERY = 0
+    internal val CAMERA = 1
 
 
     //endregion
@@ -31,13 +31,13 @@ class MainActivity : AppCompatActivity() {
 
         cameraButton.setOnClickListener {
             val intent = Intent(this, ImageActivity::class.java)
-            intent.putExtra("buttonClicked", RESULT_CAMERA)
+            intent.putExtra("buttonClicked", CAMERA)
             startActivity(intent)
         }
 
         galleryButton.setOnClickListener(View.OnClickListener {
             val intent = Intent(this, ImageActivity::class.java)
-            intent.putExtra("buttonClicked", RESULT_GALLERY)
+            intent.putExtra("buttonClicked", GALLERY)
             startActivity(intent)
         })
 
