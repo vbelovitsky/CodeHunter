@@ -25,8 +25,8 @@
             android:background="@drawable/round_button"
             android:src="@drawable/camera"
             android:scaleType="centerCrop"
-            android:id="@+id/imageButton3" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toStartOf="@+id/imageButton"
+            android:id="@+id/imageButtonCamera" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toStartOf="@+id/imageButtonGallery"
             android:layout_marginBottom="60dp" app:layout_constraintBottom_toBottomOf="parent"/>
 
     <ImageButton
@@ -36,8 +36,8 @@
             android:background="@drawable/round_button"
             android:src="@drawable/gallery"
             android:scaleType="centerCrop"
-            android:id="@+id/imageButton"
-            app:layout_constraintStart_toEndOf="@+id/imageButton3" app:layout_constraintHorizontal_bias="0.5"
+            android:id="@+id/imageButtonGallery"
+            app:layout_constraintStart_toEndOf="@+id/imageButtonCamera" app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginBottom="60dp"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
