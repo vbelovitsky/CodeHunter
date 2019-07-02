@@ -1,6 +1,5 @@
 package com.kotlin.vbel.codehunter;
 
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -11,16 +10,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 import pub.devrel.easypermissions.EasyPermissions;
-
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Temp extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     private static int GALLERY = 2;
     private static int CAMERA = 3;
@@ -32,17 +28,30 @@ public class Temp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
 
-        TextView test = findViewById(R.id.test);
-        ImageView image = findViewById(R.id.testImage);
 
-        int buttonClicked = getIntent().getIntExtra("buttonClicked", 0);
+        ImageButton cameraButton = findViewById(R.id.imageButtonCamera);
+        ImageButton galleryButton = findViewById(R.id.imageButtonGallery);
 
-        if (buttonClicked == CAMERA){
-            imageFromCamera();
+        cameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imageFromCamera();
+            }
+        });
+
+        galleryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imageFromGallery();
+            }
+        });
+
+        String[] galleryPermissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (!EasyPermissions.hasPermissions(this, galleryPermissions)) {
+            EasyPermissions.requestPermissions(this, "Access for storage",
+                    101, galleryPermissions);
         }
-        else if(buttonClicked == GALLERY){
-            imageFromGallery();
-        }
+
     }
 
     private void imageFromCamera() {
@@ -72,11 +81,9 @@ public class Temp extends AppCompatActivity {
 
         }
 
-        TextView test = findViewById(R.id.test);
-        test.setText(currentPhotoPath);
-
-        ImageView image = findViewById(R.id.testImage);
-        image.setImageBitmap(BitmapFactory.decodeFile(currentPhotoPath));
+        Intent imageActivityIntent = new Intent(this, ImageActivity.class);
+        imageActivityIntent.putExtra("imageURI", currentPhotoPath);
+        startActivity(imageActivityIntent);
 
     }
 
