@@ -79,12 +79,18 @@ class MainActivity : AppCompatActivity() {
 
         val galleryButton = findViewById<ImageButton>(R.id.imageButtonGallery)
 
+
         cameraButton.setOnClickListener {
             dispatchTakePictureIntent()
             galleryAddPic()
         }
 
-
+        //region: Gallery
+        galleryButton.setOnClickListener(View.OnClickListener {
+            val intent = Intent(this, Gallery::class.java)
+            startActivity(intent)
+        })
+        //endregion
     }
 
 }
