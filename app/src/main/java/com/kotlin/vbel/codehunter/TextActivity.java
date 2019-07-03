@@ -34,6 +34,7 @@ public class TextActivity extends AppCompatActivity {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, languages);
         AutoCompleteTextView actv = findViewById(R.id.autoLanguage);
+        actv.setThreshold(1);
         actv.setAdapter(adapter);
 
 
@@ -41,7 +42,7 @@ public class TextActivity extends AppCompatActivity {
         ImageButton saveButton = findViewById(R.id.imageButtonSave);
         ImageButton sendButton = findViewById(R.id.imageButtonSend);
 
-        
+
 
 
 
