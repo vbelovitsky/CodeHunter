@@ -4,6 +4,8 @@ package com.kotlin.vbel.codehunter;
 import android.app.Activity;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 public class ImageActivity extends Activity {
@@ -20,6 +22,14 @@ public class ImageActivity extends Activity {
 
         image.setImageBitmap(BitmapFactory.decodeFile(imageURI));
 
+        ImageButton leftButton = findViewById(R.id.imageButtonLeft);
+
+        leftButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         System.gc();
     }

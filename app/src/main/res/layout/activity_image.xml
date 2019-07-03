@@ -7,14 +7,29 @@
         android:layout_height="match_parent"
         tools:context=".ImageActivity">
 
-    <ImageView android:layout_width="fill_parent" android:layout_height="570dp"
-               android:scaleType="centerCrop"
+    <ImageView android:layout_width="fill_parent" android:layout_height="500dp"
+               android:scaleType="fitCenter"
                android:id="@+id/testImage"
                android:padding="5dp"
-               android:layout_marginBottom="80dp"
-               app:layout_constraintBottom_toBottomOf="parent"
                app:layout_constraintTop_toTopOf="parent"
-               app:layout_constraintVertical_bias="0.808" app:layout_constraintEnd_toStartOf="parent"
-    />
+               app:layout_constraintEnd_toStartOf="parent"
+               android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/imageButtonLeft"/>
+
+    <ImageButton android:layout_width="96dp" android:layout_height="96dp"
+                 android:background="@drawable/round_button"
+                 android:src="@drawable/left"
+                 android:scaleType="centerCrop"
+                 android:id="@+id/imageButtonLeft" app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toStartOf="@+id/imageButtonCheck"
+                 android:layout_marginBottom="50dp" app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <ImageButton android:layout_width="96dp" android:layout_height="96dp"
+                 android:background="@drawable/round_button"
+                 android:src="@drawable/check"
+                 android:id="@+id/imageButtonCheck"
+                 android:scaleType="centerCrop"
+                 app:layout_constraintStart_toEndOf="@+id/imageButtonLeft" app:layout_constraintHorizontal_bias="0.5"
+                 app:layout_constraintEnd_toEndOf="parent" android:layout_marginBottom="50dp"
+                 app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
