@@ -1,4 +1,4 @@
-//package com.kotlin.vbel.codehunter
+//package com.kotlin.vbel.com.vbel.codehunter
 //
 //import android.support.test.InstrumentationRegistry
 //import android.support.test.runner.AndroidJUnit4
@@ -19,6 +19,6 @@
 //    fun useAppContext() {
 //        // Context of the app under test.
 //        val appContext = InstrumentationRegistry.getTargetContext()
-//        assertEquals("com.kotlin.vbel.codehunter", appContext.packageName)
+//        assertEquals("com.kotlin.vbel.com.vbel.codehunter", appContext.packageName)
 //    }
 //}
