@@ -1,9 +1,9 @@
 package com.kotlin.vbel.codehunter;
 
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.ImageButton;
-import android.widget.TextView;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.view.View;
+import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -17,7 +17,7 @@ public class TextActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text);
 
-        TextView recognizedTextView = findViewById(R.id.recognizedText);
+        final TextView recognizedTextView = findViewById(R.id.recognizedText);
         String recognizedText = getIntent().getStringExtra("recognizedText");
         recognizedTextView.setText(recognizedText);
 
@@ -41,8 +41,17 @@ public class TextActivity extends AppCompatActivity {
         ImageButton saveButton = findViewById(R.id.imageButtonSave);
         ImageButton sendButton = findViewById(R.id.imageButtonSend);
 
-        
 
+        copyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                String getstring = recognizedTextView.getText().toString();
+                String label = "CodeHunter";
+                ClipData clip = ClipData.newPlainText(label, getstring);
+                clipboard.setPrimaryClip(clip);
+            }
+        });
 
 
 
