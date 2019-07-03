@@ -87,6 +87,9 @@ public class MainActivity extends Activity {
         }
 
     }
+    public Uri getter(Uri uriinfo){
+        return uriinfo;
+    }
 
     private File createImageFile() throws IOException {
         // Create an image file name
