@@ -16,6 +16,5 @@ public class TextActivity extends AppCompatActivity {
 
         recognizedTextView.setText(recognizedText);
 
-
     }
 }

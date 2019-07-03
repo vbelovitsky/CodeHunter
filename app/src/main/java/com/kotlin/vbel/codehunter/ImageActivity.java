@@ -19,8 +19,6 @@ import java.io.IOException;
 
 public class ImageActivity extends Activity {
 
-    private static String ERROR_MESSAGE = "Error";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +54,7 @@ public class ImageActivity extends Activity {
     }
 
     public String getTextFromImage(String imageURI){
+        String ERROR_MESSAGE = "Error";
 
         Bitmap bitmap = BitmapFactory.decodeFile(imageURI);
 
@@ -82,34 +81,6 @@ public class ImageActivity extends Activity {
         }
 
     }
-
-
-
-    //Uri contentURI = Uri.parse(imageURI);
-//
-    //public String text;
-    //public void getTextFromImage(View view) throws IOException {
-//
-//
-    //    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
-    //    TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
-    //    if(!textRecognizer.isOperational()){
-    //        Toast.makeText(getApplicationContext(), "could not get the Text", Toast.LENGTH_SHORT).show();
-    //    }
-    //    else {
-    //        Frame frame = new Frame.Builder().setBitmap(bitmap).build();
-//
-    //        SparseArray<TextBlock> items = textRecognizer.detect(frame);
-    //        StringBuilder sb = new StringBuilder();
-    //        for(int i = 0; i < items.size(); ++i){
-    //            TextBlock myItem = items.valueAt(i);
-    //            sb.append(myItem.getValue());
-    //            sb.append("\n");
-    //        }
-//
-    //        text = sb.toString() ;
-    //    }
-    //}
 
     @Override
     public void onDestroy(){
