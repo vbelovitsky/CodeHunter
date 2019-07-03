@@ -7,9 +7,54 @@
         android:layout_height="match_parent"
         tools:context=".TextActivity">
 
-    <TextView
-            android:text=""
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/recognizedText" app:layout_constraintTop_toTopOf="parent"/>
+    <ScrollView android:layout_width="match_parent" android:layout_height="400dp" android:layout_marginBottom="200dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" android:id="@+id/scrollView2">
+        <TextView
+                android:text=""
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/recognizedText" app:layout_constraintTop_toTopOf="parent"/>
+    </ScrollView>
+
+    <AutoCompleteTextView android:layout_width="match_parent" android:layout_height="60dp"
+                          android:id="@+id/autoLanguage"
+                          android:hint="@string/lang_hint"
+                          tools:layout_editor_absoluteX="0dp" app:layout_constraintTop_toBottomOf="@+id/scrollView2"
+                          android:layout_marginTop="52dp"
+                          android:layout_marginStart="20dp"
+                          android:layout_marginEnd="20dp"
+    />
+
+    <ImageButton android:layout_width="96dp" android:layout_height="96dp"
+                 android:layout_marginBottom="56dp"
+                 android:padding="12dp"
+                 android:background="@drawable/round_button"
+                 android:src="@drawable/copy"
+                 android:scaleType="centerCrop"
+                 android:id="@+id/imageButtonCopy" app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintHorizontal_bias="0.189" app:layout_constraintEnd_toStartOf="@+id/imageButtonSend"
+                 app:layout_constraintBottom_toBottomOf="parent"/>
+    <ImageButton android:layout_width="96dp" android:layout_height="96dp"
+                 android:layout_marginBottom="56dp"
+                 android:padding="17dp"
+                 android:background="@drawable/round_button"
+                 android:src="@drawable/save"
+                 android:scaleType="centerCrop"
+                 android:id="@+id/imageButtonSave"
+                 app:layout_constraintStart_toEndOf="@+id/imageButtonCopy" app:layout_constraintHorizontal_bias="0.5"
+                 app:layout_constraintEnd_toStartOf="@+id/imageButtonSend"
+                 app:layout_constraintBottom_toBottomOf="parent"/>
+    <ImageButton android:layout_width="96dp" android:layout_height="96dp"
+                 android:background="@drawable/round_button"
+                 android:layout_marginBottom="56dp"
+                 android:padding="10dp"
+                 android:src="@drawable/send"
+                 android:scaleType="centerCrop"
+                 android:id="@+id/imageButtonSend" app:layout_constraintStart_toEndOf="@+id/imageButtonSave"
+                 app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toEndOf="parent"
+                  app:layout_constraintBottom_toBottomOf="parent"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

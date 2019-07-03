@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">CodeHunter</string>
+    <string name="lang_hint">Type language (blank for txt)</string>
+
+    <string-array name="languages">
+        <item>Java=.java</item>
+        <item>C++=.cpp</item>
+        <item>C#=.cs</item>
+        <item>Python=.py</item>
+        <item>Kotlin=.kt</item>
+        <item>PHP=.php</item>
+        <item>JavaScript=.js</item>
+        <item>Ruby=.ruby </item>
+        <item>Go=.go </item>
+        <item>Swift=.swift</item>
+        <item>Json=.json</item>
+        <item>ObjectiveC=objectibe-c</item>
+        <item>R=.r</item>
+        <item>Assembler=.s</item>
+        <item>Pascal=.pas</item>
+        <item>Basic=.bas</item>
+        <item>Fortran=.f</item>
+        <item>Scala=.sc</item>
+        <item>Delphi= .d</item>
+    </string-array>
 </resources>
