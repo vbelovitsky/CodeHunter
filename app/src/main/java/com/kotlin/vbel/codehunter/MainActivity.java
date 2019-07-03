@@ -139,10 +139,4 @@ public class MainActivity extends Activity {
         System.gc();
     }
 
-    @Override
-    public void onDestroy(){
-        super.onDestroy();
-        System.gc();
-    }
-
 }

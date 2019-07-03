@@ -10,9 +10,16 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
+import com.google.firebase.ml.vision.FirebaseVision;
+import com.google.firebase.ml.vision.common.FirebaseVisionImage;
+import com.google.firebase.ml.vision.text.FirebaseVisionText;
+import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
 
 public class ImageActivity extends Activity {
 
@@ -25,8 +32,8 @@ public class ImageActivity extends Activity {
         ImageView image = findViewById(R.id.mainImage);
 
         final String imageURI = getIntent().getStringExtra("imageURI");
-
-        image.setImageBitmap(BitmapFactory.decodeFile(imageURI));
+        final Bitmap bitmap = BitmapFactory.decodeFile(imageURI);
+        image.setImageBitmap(bitmap);
 
         ImageButton leftButton = findViewById(R.id.imageButtonLeft);
         ImageButton checkButton = findViewById(R.id.imageButtonCheck);
@@ -41,10 +48,10 @@ public class ImageActivity extends Activity {
         checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String recognizedText = getTextFromImage(imageURI);
-                Intent textActivityIntent = new Intent(ImageActivity.this, TextActivity.class);
-                textActivityIntent.putExtra("recognizedText", recognizedText);
-                startActivity(textActivityIntent);
+                getMLTextFromImage(bitmap);
+                //Intent textActivityIntent = new Intent(ImageActivity.this, TextActivity.class);
+                //textActivityIntent.putExtra("recognizedText", recognizedText);
+                //startActivity(textActivityIntent);
             }
         });
 
@@ -68,21 +75,50 @@ public class ImageActivity extends Activity {
             SparseArray<TextBlock> items = textRecognizer.detect(frame);
             StringBuilder sb = new StringBuilder();
 
-            for(int i = 0; i< items.size(); i++){
+            for(int i = 0; i < items.size(); i++){
                 TextBlock myItem = items.valueAt(i);
                 sb.append(myItem.getValue());
                 sb.append("\n");
             }
 
-            return sb.toString();
+            String recognizedText = sb.toString();
+            if (recognizedText.equals("")){recognizedText = ERROR_MESSAGE;}
+            return recognizedText;
         }
-
     }
 
-    @Override
-    public void onDestroy(){
-        super.onDestroy();
-        System.gc();
+
+
+    public void getMLTextFromImage(Bitmap bitmap){
+        final String ERROR_MESSAGE = "Error, no text found";
+
+        FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(bitmap);
+
+        FirebaseVisionTextRecognizer textRecognizer = FirebaseVision.getInstance()
+                .getOnDeviceTextRecognizer();
+
+        textRecognizer.processImage(image)
+                .addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
+                    @Override
+                    public void onSuccess(FirebaseVisionText result) {
+                        String recognizedText = result.getText();
+                        if (recognizedText.equals("")) recognizedText = ERROR_MESSAGE;
+                        Intent textActivityIntent = new Intent(ImageActivity.this, TextActivity.class);
+                        textActivityIntent.putExtra("recognizedText", recognizedText);
+                        startActivity(textActivityIntent);
+                    }
+                })
+                .addOnFailureListener(
+                        new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Intent textActivityIntent = new Intent(ImageActivity.this, TextActivity.class);
+                                textActivityIntent.putExtra("recognizedText", ERROR_MESSAGE);
+                                startActivity(textActivityIntent);
+                            }
+                        });
     }
+
+
 
 }

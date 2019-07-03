@@ -41,8 +41,8 @@
         <activity android:name=".ImageActivity"
                   android:screenOrientation="portrait">
             <meta-data
-                    android:name="com.google.android.gms.vision.DEPENDENCIES"
-                    android:value="orc">
+                    android:name="com.google.firebase.ml.vision.DEPENDENCIES"
+                    android:value="ocr">
             </meta-data>
         </activity>
 

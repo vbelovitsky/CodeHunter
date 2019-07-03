@@ -66,15 +66,16 @@ public class TextActivity extends AppCompatActivity {
                 String expansion = ".txt";
                 int index = Arrays.asList(languages).indexOf(langInput);
 
-                //Kostyil
+                //expansion validation
                 if (!langInput.equals("")) {
                     if (index != -1) {
                         expansion = expansions[index];
-                    } else if (langInput.toCharArray()[0] == '.' && langInput.toCharArray().length > 1) {
+                    } else if (langInput.toCharArray()[0] == '.' && langInput.toCharArray().length > 1 && langInput.toCharArray().length <= 5) {
                         expansion = langInput;
                     }
                 }
 
+                //Create file and write recognized text in it
                 String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                 String fileName = "Code_" + timeStamp + expansion;
                 try {
@@ -91,6 +92,14 @@ public class TextActivity extends AppCompatActivity {
 
             }
         });
+
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
     }
 
 }
