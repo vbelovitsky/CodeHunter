@@ -19,6 +19,7 @@ import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.lang.Object;
 
 public class TextActivity extends AppCompatActivity {
 
@@ -82,22 +83,30 @@ public class TextActivity extends AppCompatActivity {
             }
         });
 
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String stringUri = saveFile(recognizedText, actv, languages, expansions);
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
+//        sendButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                File file = saveFile(recognizedText, actv, languages, expansions);
+//
+//
+//                Intent sendIntent = new Intent();
+//                sendIntent.setAction(Intent.ACTION_SEND);
+//
+//
+//                //filetypemap getcontenttype
+//                sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(file.getAbsolutePath()));
+//                StringBuilder type = new StringBuilder();
+//                type.append("file/*");
+//                sendIntent.setType(type.toString());
+//                startActivity(sendIntent);
+//            }
+//        });
+        }
+    
 
-                sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(stringUri));
-                sendIntent.setType("text/plain");
-                startActivity(sendIntent);
-            }
-        });
 
-    }
 
-    private String saveFile(String recognizedText, AutoCompleteTextView actv, String[] languages, String[] expansions){
+    private File saveFile(String recognizedText, AutoCompleteTextView actv, String[] languages, String[] expansions){
 
         //find expansion for file
         String langInput = actv.getText().toString();
@@ -116,19 +125,25 @@ public class TextActivity extends AppCompatActivity {
         //Create file and write recognized text in it
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String fileName = "Code_" + timeStamp + expansion;
+        final File file = new File(TextActivity.this.getExternalFilesDir("Code"), fileName);
         try {
-            final File file = new File(TextActivity.this.getExternalFilesDir("Code"), fileName);
             FileWriter fileWriter = new FileWriter(file);
             fileWriter.write(recognizedText);
             fileWriter.close();
 
             Toast.makeText(TextActivity.this, "Saved to " + file.getPath(), Toast.LENGTH_SHORT).show();
-            return file.getAbsolutePath();
+
         }
         catch (Exception e){
             Toast.makeText(TextActivity.this, "Error!", Toast.LENGTH_SHORT).show();
         }
-        return "";
+        return file;
     }
-
+//    public abstract class FileTypeMap extends Object{
+//        FileTypeMap(){
+//            public abstract String getContentType(String file){
+//
+//            }
+//        }
+//    }
 }
