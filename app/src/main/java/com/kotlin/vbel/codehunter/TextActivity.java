@@ -8,6 +8,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
+import com.algorithmia.APIException;
+import com.algorithmia.AlgorithmException;
+import com.algorithmia.Algorithmia;
+import com.algorithmia.AlgorithmiaClient;
+import com.algorithmia.algo.AlgoResponse;
+import com.algorithmia.algo.Algorithm;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -22,9 +28,24 @@ public class TextActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text);
 
+
         final TextView recognizedTextView = findViewById(R.id.recognizedText);
         final String recognizedText = getIntent().getStringExtra("recognizedText");
         recognizedTextView.setText(recognizedText);
+
+        AlgorithmiaClient client = Algorithmia.client("simHuy2KeDChHkrT9d6sCPeyZ/b1");
+        Algorithm algo = client.algo("PetiteProgrammer/ProgrammingLanguageIdentification/0.1.3");
+        algo.setTimeout(300L, java.util.concurrent.TimeUnit.SECONDS); //optional
+        AlgoResponse result = null;
+        try {
+            result = algo.pipe(recognizedText);
+            TextView test = findViewById(R.id.testAlgo);
+            test.setText(result.asString());
+        } catch (APIException e) {
+            e.printStackTrace();
+        } catch (AlgorithmException e) {
+            e.printStackTrace();
+        }
 
         String[] languages_data = getResources().getStringArray(R.array.languages);
         int len = languages_data.length;
