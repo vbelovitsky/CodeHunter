@@ -5,21 +5,18 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.SparseArray;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.vision.Frame;
-import com.google.android.gms.vision.text.TextBlock;
-import com.google.android.gms.vision.text.TextRecognizer;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.text.FirebaseVisionText;
 import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
+
+import static com.kotlin.vbel.codehunter.TextActivity.RECOGNIZED_TEXT_KEY;
 
 public class ImageActivity extends Activity {
 
@@ -54,7 +51,7 @@ public class ImageActivity extends Activity {
 
     }
 
-    public void getMLTextFromImage(Bitmap bitmap){
+    public void getMLTextFromImage(Bitmap bitmap) {
         final String ERROR_MESSAGE = "Error, no text found";
         String SAMSUNG_MESSAGE = "Samsung(((";
 
@@ -80,13 +77,13 @@ public class ImageActivity extends Activity {
                                     intentToTextActivity(ERROR_MESSAGE);
                                 }
                             });
-        }
-        else{
+        } else {
             intentToTextActivity(SAMSUNG_MESSAGE);
         }
     }
 
-    private void intentToTextActivity(String recognizedText){
+
+    private void intentToTextActivity(String recognizedText) {
         Intent textActivityIntent = new Intent(ImageActivity.this, TextActivity.class);
         textActivityIntent.putExtra("recognizedText", recognizedText);
         startActivity(textActivityIntent);
