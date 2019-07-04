@@ -14,7 +14,7 @@ import com.algorithmia.Algorithmia;
 import com.algorithmia.AlgorithmiaClient;
 import com.algorithmia.algo.AlgoResponse;
 import com.algorithmia.algo.Algorithm;
-import javax.activation.MimetypesFileTypeMap;
+//import javax.activation.MimetypesFileTypeMap;
 import java.io.*;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
@@ -91,23 +91,13 @@ public class TextActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String filepath = saveFile(recognizedText, actv, languages, expansions);
-                File file;
-                file.
+                String uriToImage = saveFile(recognizedText, actv, languages, expansions);
 
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-
-
-                //filetypemap getcontenttype
-                sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(file.getAbsolutePath()));
-//              MimetypesFileTypeMap mimeTypeMap = new MimetypesFileTypeMap();
-                String filename = saveFile(recognizedText, actv, languages, expansions);
-//              String mimetype = mimeTypeMap.getcontenttype(filename);
-                String mimeType = URLConnection.guessContentTypeFromName(file.getName());
-                sendIntent.setType(mimeType);
-                startActivity(sendIntent);
-
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_STREAM, uriToImage);
+                shareIntent.setType("*/*");
+                startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
             }
         });
     }
