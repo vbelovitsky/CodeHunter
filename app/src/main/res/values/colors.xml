@@ -5,7 +5,7 @@
     <color name="colorPrimary">#1A759C</color>
     <color name="colorPrimaryDark">#005B82</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="colorWhite">#646464</color>
+    <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
-    <color name="colorLightGray">#373737</color>
+    <color name="colorLightGray">#B3B3B3</color>
 </resources>
