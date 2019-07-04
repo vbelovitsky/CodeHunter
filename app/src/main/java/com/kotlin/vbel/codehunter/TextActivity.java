@@ -80,15 +80,18 @@ public class TextActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveFile(recognizedText, actv, languages, expansions);
+                saveFile(recognizedText, actv, languages, expansions, true);
             }
         });
-
+        //TODO: 1 - УДАЛЕНИЕ
+        //      2 - ТЕКСТ ОКОЛО КНОПОК
+        //      3 - ПЕРЕРАБОТАТЬ TOAST ЧТОБЫ НЕ ПОКАЗЫВАЛ СОХРАНЕНИЕ : сделал, добавив boolean в safefile()
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String UriIntent = saveFile(recognizedText, actv, languages, expansions);
-
+                String[] nameAndPath = saveFile(recognizedText, actv, languages, expansions, false);
+                String UriIntent = nameAndPath[0];
+                String fileName = nameAndPath[1];
                 Intent shareIntent = new Intent();
                 shareIntent.setAction(Intent.ACTION_SEND);
                 shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(UriIntent));
@@ -138,7 +141,7 @@ public class TextActivity extends AppCompatActivity {
     }
 
 
-    private String saveFile(String recognizedText, AutoCompleteTextView actv, String[] languages, String[] expansions) {
+    private String[] saveFile(String recognizedText, AutoCompleteTextView actv, String[] languages, String[] expansions, boolean bula) {
 
         //find expansion for file
         String langInput = actv.getText().toString();
@@ -158,20 +161,25 @@ public class TextActivity extends AppCompatActivity {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String fileName = "Code_" + timeStamp + expansion;
         final File file = new File(TextActivity.this.getExternalFilesDir("Code"), fileName);
+        String[] ret = new String[2];
         try {
             FileWriter fileWriter = new FileWriter(file);
             fileWriter.write(recognizedText);
             fileWriter.close();
-
-            Toast.makeText(TextActivity.this, "Saved to " + file.getPath(), Toast.LENGTH_SHORT).show();
-            return file.getAbsolutePath();
+            if(bula)
+                Toast.makeText(TextActivity.this, "Saved to " + file.getPath(), Toast.LENGTH_SHORT).show();
+            ret[0] = file.getAbsolutePath();
+            ret[1] = file.getName();
+            return ret;
         } catch (Exception e) {
-            Toast.makeText(TextActivity.this, "Error!", Toast.LENGTH_SHORT).show();
-            return "";
+            if(bula)
+                Toast.makeText(TextActivity.this, "Error!", Toast.LENGTH_SHORT).show();
+            ret[0] = "";
+            ret[1] = "";
+            return ret;
         }
 
     }
-
 
 }
 
