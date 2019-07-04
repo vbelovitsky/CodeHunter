@@ -11,14 +11,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
+import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements EasyPermissions.PermissionCallbacks {
 
     private static int GALLERY = 2;
     private static int CAMERA = 3;
@@ -56,8 +59,6 @@ public class MainActivity extends Activity {
             }
         });
 
-
-
     }
 
     //region Camera and Gallery
@@ -92,8 +93,10 @@ public class MainActivity extends Activity {
             startActivity(imageActivityIntent);
 
             System.gc();
+        }else if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE) {
+            Toast.makeText(this, "Return to CodeHunter", Toast.LENGTH_SHORT)
+                    .show();
         }
-
     }
 
     private File createImageFile() throws IOException {
@@ -143,15 +146,33 @@ public class MainActivity extends Activity {
 
     //endregion
 
+//    @Override
+//    public void onRequestPermissionsResult (int requestCode, String[] permissions, int[] grantResults){
+//        if (requestCode == 101){
+//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                imageFromGallery();
+//            } else {
+//                Toast.makeText(MainActivity.this, "Need permissions to use gallery", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//    }
+
     @Override
     public void onRequestPermissionsResult (int requestCode, String[] permissions, int[] grantResults){
-        if (requestCode == 101){
-            if (grantResults.length > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                imageFromGallery();
-            } else {
-                Toast.makeText(MainActivity.this, "Need permissions to use gallery", Toast.LENGTH_SHORT).show();
-            }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> list) {
+        imageFromGallery();
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            new AppSettingsDialog.Builder(this).build().show();
         }
     }
 
