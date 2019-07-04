@@ -88,7 +88,6 @@ public class ImageActivity extends Activity {
     }
 
 
-
     public void getMLTextFromImage(Bitmap bitmap){
         final String ERROR_MESSAGE = "Error, no text found";
 

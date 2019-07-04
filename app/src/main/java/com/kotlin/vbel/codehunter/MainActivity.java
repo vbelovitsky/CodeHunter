@@ -1,6 +1,7 @@
 package com.kotlin.vbel.codehunter;
 
 import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 import androidx.core.content.FileProvider;
 import pub.devrel.easypermissions.EasyPermissions;
 import java.io.File;
@@ -28,6 +30,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final String[] galleryPermissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
         ImageButton cameraButton = findViewById(R.id.imageButtonCamera);
         ImageButton galleryButton = findViewById(R.id.imageButtonGallery);
 
@@ -41,13 +45,14 @@ public class MainActivity extends Activity {
         galleryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String[] galleryPermissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
                 if (!EasyPermissions.hasPermissions(MainActivity.this, galleryPermissions)) {
                     EasyPermissions.requestPermissions(MainActivity.this, "Access for storage",
                             101, galleryPermissions);
                 }
-
-                imageFromGallery();
+                else{
+                    imageFromGallery();
+                }
             }
         });
 
@@ -55,6 +60,7 @@ public class MainActivity extends Activity {
 
     }
 
+    //region Camera and Gallery
     private void imageFromCamera() {
         dispatchTakePictureIntent();
     }
@@ -133,6 +139,20 @@ public class MainActivity extends Activity {
         Uri contentUri = Uri.fromFile(f);
         mediaScanIntent.setData(contentUri);
         this.sendBroadcast(mediaScanIntent);
+    }
+
+    //endregion
+
+    @Override
+    public void onRequestPermissionsResult (int requestCode, String[] permissions, int[] grantResults){
+        if (requestCode == 101){
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                imageFromGallery();
+            } else {
+                Toast.makeText(MainActivity.this, "Need permissions to use gallery", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override

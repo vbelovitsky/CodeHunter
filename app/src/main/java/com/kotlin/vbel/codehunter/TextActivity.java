@@ -6,6 +6,12 @@ import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import com.algorithmia.APIException;
+import com.algorithmia.Algorithmia;
+import com.algorithmia.AlgorithmiaClient;
+import com.algorithmia.algo.AlgoResponse;
+import com.algorithmia.algo.Algorithm;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.text.SimpleDateFormat;
@@ -22,6 +28,16 @@ public class TextActivity extends AppCompatActivity {
         final TextView recognizedTextView = findViewById(R.id.recognizedText);
         final String recognizedText = getIntent().getStringExtra("recognizedText");
         recognizedTextView.setText(recognizedText);
+
+
+        //AlgorithmiaClient client = Algorithmia.client("simHuy2KeDChHkrT9d6sCPeyZ/b1");
+        //Algorithm langDetect = client.algo("PetiteProgrammer/ProgrammingLanguageIdentification/0.1.3");
+        //langDetect.setTimeout(300L, java.util.concurrent.TimeUnit.SECONDS); //optional
+        //try {
+        //    AlgoResponse result = langDetect.pipe(recognizedText);
+        //} catch (APIException e) {
+        //    e.printStackTrace();
+        //}
 
         String[] languages_data = getResources().getStringArray(R.array.languages);
         int len = languages_data.length;
