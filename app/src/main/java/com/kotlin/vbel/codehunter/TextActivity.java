@@ -116,17 +116,23 @@ public class TextActivity extends AppCompatActivity {
                                 Log.d(TAG, result.asJsonString());
                                 if(result.isSuccess()){
 
-                                    JSONArray jsonArray = new JSONArray(result.asJsonString());
-                                    //String[] arr = result.asJsonString().split("],[");
+                                    String[] dataArray = result.asJsonString().replaceAll("\\[|\\]", "").split(",");
+
+                                    String[] langArray = new String[3];
+                                    Double[] chanceArray = new Double[3];
+                                    for(int i = 0; i < 6; i++){
+                                        if (i % 2 == 0)
+                                            langArray[i/2] = capitalize(dataArray[i].replaceAll("\"", ""));
+                                        else
+                                            chanceArray[i/2] = Double.parseDouble(dataArray[i]);
+                                    }
 
                                     TextView test = findViewById(R.id.testAlgo);
-                                    test.setText(result.asJsonString());
-                                    //тут парсим json и выводим куда нибудь резы
+                                    test.setText(langArray[0]);
+
                                 }
 
                             } catch (AlgorithmException e) {
-                                e.printStackTrace();
-                            } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
@@ -137,6 +143,12 @@ public class TextActivity extends AppCompatActivity {
             }
         });
         asyncThread.start();
+    }
+
+
+    public static String capitalize(String str)
+    {
+        return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 
 
