@@ -14,8 +14,9 @@ import com.algorithmia.Algorithmia;
 import com.algorithmia.AlgorithmiaClient;
 import com.algorithmia.algo.AlgoResponse;
 import com.algorithmia.algo.Algorithm;
-
+import javax.activation.MimetypesFileTypeMap;
 import java.io.*;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -35,7 +36,6 @@ public class TextActivity extends AppCompatActivity {
 
         AlgorithmiaClient client = Algorithmia.client("simHuy2KeDChHkrT9d6sCPeyZ/b1");
         Algorithm algo = client.algo("PetiteProgrammer/ProgrammingLanguageIdentification/0.1.3");
-        algo.setTimeout(300L, java.util.concurrent.TimeUnit.SECONDS); //optional
         AlgoResponse result = null;
         try {
             result = algo.pipe(recognizedText);
@@ -88,24 +88,28 @@ public class TextActivity extends AppCompatActivity {
             }
         });
 
-//        sendButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                File file = saveFile(recognizedText, actv, languages, expansions);
-//
-//
-//                Intent sendIntent = new Intent();
-//                sendIntent.setAction(Intent.ACTION_SEND);
-//
-//
-//                //filetypemap getcontenttype
-//                sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(file.getAbsolutePath()));
-//                StringBuilder type = new StringBuilder();
-//                type.append("file/*");
-//                sendIntent.setType(type.toString());
-//                startActivity(sendIntent);
-//            }
-//        });
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String filepath = saveFile(recognizedText, actv, languages, expansions);
+                File file;
+                file.
+
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+
+
+                //filetypemap getcontenttype
+                sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(file.getAbsolutePath()));
+//              MimetypesFileTypeMap mimeTypeMap = new MimetypesFileTypeMap();
+                String filename = saveFile(recognizedText, actv, languages, expansions);
+//              String mimetype = mimeTypeMap.getcontenttype(filename);
+                String mimeType = URLConnection.guessContentTypeFromName(file.getName());
+                sendIntent.setType(mimeType);
+                startActivity(sendIntent);
+
+            }
+        });
     }
 
     private String saveFile(String recognizedText, AutoCompleteTextView actv, String[]languages, String[]expansions){
