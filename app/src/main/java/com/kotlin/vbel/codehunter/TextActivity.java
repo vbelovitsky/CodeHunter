@@ -2,6 +2,7 @@ package com.kotlin.vbel.codehunter;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.net.Uri;
 import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,14 +31,15 @@ public class TextActivity extends AppCompatActivity {
         recognizedTextView.setText(recognizedText);
 
 
-        //AlgorithmiaClient client = Algorithmia.client("simHuy2KeDChHkrT9d6sCPeyZ/b1");
-        //Algorithm langDetect = client.algo("PetiteProgrammer/ProgrammingLanguageIdentification/0.1.3");
-        //langDetect.setTimeout(300L, java.util.concurrent.TimeUnit.SECONDS); //optional
-        //try {
-        //    AlgoResponse result = langDetect.pipe(recognizedText);
-        //} catch (APIException e) {
-        //    e.printStackTrace();
-        //}
+        AlgorithmiaClient client = Algorithmia.client("simHuy2KeDChHkrT9d6sCPeyZ/b1");
+        Algorithm langDetect = client.algo("PetiteProgrammer/ProgrammingLanguageIdentification/0.1.3");
+        langDetect.setTimeout(300L, java.util.concurrent.TimeUnit.SECONDS); //optional
+        try {
+            AlgoResponse result = langDetect.pipe(recognizedText);
+
+        } catch (APIException e) {
+            e.printStackTrace();
+        }
 
         String[] languages_data = getResources().getStringArray(R.array.languages);
         int len = languages_data.length;
@@ -88,7 +90,7 @@ public class TextActivity extends AppCompatActivity {
 
     }
 
-    private void saveFile(String recognizedText, AutoCompleteTextView actv, String[] languages, String[] expansions){
+    private String saveFile(String recognizedText, AutoCompleteTextView actv, String[] languages, String[] expansions){
 
         //find expansion for file
         String langInput = actv.getText().toString();
@@ -114,10 +116,12 @@ public class TextActivity extends AppCompatActivity {
             fileWriter.close();
 
             Toast.makeText(TextActivity.this, "Saved to " + file.getPath(), Toast.LENGTH_SHORT).show();
+            return file.getAbsolutePath();
         }
         catch (Exception e){
             Toast.makeText(TextActivity.this, "Error!", Toast.LENGTH_SHORT).show();
         }
+        return "";
     }
 
 }
