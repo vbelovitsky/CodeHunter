@@ -2,6 +2,7 @@
     <string name="app_name">CodeHunter</string>
     <string name="lang_hint">Type language or extension (blank for txt)</string>
     <string name="suggestion">Guess it is...</string>
+    <string name="send_to">CodeHunter</string>
 
     <string-array name="languages">
         <item>Java=.java</item>
