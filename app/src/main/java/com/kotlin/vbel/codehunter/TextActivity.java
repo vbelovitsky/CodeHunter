@@ -2,15 +2,13 @@ package com.kotlin.vbel.codehunter;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import com.algorithmia.APIException;
-import com.algorithmia.Algorithmia;
-import com.algorithmia.AlgorithmiaClient;
+import com.algorithmia.AlgorithmException;
 import com.algorithmia.algo.AlgoResponse;
 import com.algorithmia.algo.Algorithm;
 
@@ -19,9 +17,13 @@ import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
-import java.lang.Object;
+import java.util.concurrent.TimeUnit;
 
 public class TextActivity extends AppCompatActivity {
+
+    private final static String TAG = TextActivity.class.getSimpleName();
+
+    public final static String RECOGNIZED_TEXT_KEY = "recognizedText";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,26 +31,17 @@ public class TextActivity extends AppCompatActivity {
         setContentView(R.layout.activity_text);
 
         final TextView recognizedTextView = findViewById(R.id.recognizedText);
-        final String recognizedText = getIntent().getStringExtra("recognizedText");
+        final String recognizedText = getIntent().getStringExtra(RECOGNIZED_TEXT_KEY);
         recognizedTextView.setText(recognizedText);
 
-
-        AlgorithmiaClient client = Algorithmia.client("simHuy2KeDChHkrT9d6sCPeyZ/b1");
-        Algorithm langDetect = client.algo("PetiteProgrammer/ProgrammingLanguageIdentification/0.1.3");
-        langDetect.setTimeout(300L, java.util.concurrent.TimeUnit.SECONDS); //optional
-        try {
-            AlgoResponse result = langDetect.pipe(recognizedText);
-
-        } catch (APIException e) {
-            e.printStackTrace();
-        }
+        recognizeAlgo(recognizedText);
 
         String[] languages_data = getResources().getStringArray(R.array.languages);
         int len = languages_data.length;
         final String[] languages = new String[len];
         final String[] expansions = new String[len];
 
-        for (int i = 0; i < len; i++){
+        for (int i = 0; i < len; i++) {
             String[] data = languages_data[i].split("=");
             languages[i] = data[0];
             expansions[i] = data[1];
@@ -66,7 +59,7 @@ public class TextActivity extends AppCompatActivity {
 
         copyButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                 String mainText = recognizedTextView.getText().toString();
                 String label = "CodeHunter";
@@ -101,12 +94,40 @@ public class TextActivity extends AppCompatActivity {
 //                startActivity(sendIntent);
 //            }
 //        });
-        }
-    
+    }
+
+    private void recognizeAlgo(final String text) {
+        Thread asyncThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Algorithm langDetect = App.algorithmiaClient.algo("PetiteProgrammer/ProgrammingLanguageIdentification/0.1.3");
+                langDetect.setTimeout(300L, TimeUnit.MILLISECONDS); //optional
+                try {
+                    final AlgoResponse result = langDetect.pipe(text);
+                    TextActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Log.d(TAG, result.asJsonString());
+                                if(result.isSuccess()){
+                                    //тут парсим json и выводим куда нибудь резщ
+                                }
+
+                            } catch (AlgorithmException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                } catch (APIException e) {
+                    Log.e(TAG, "recognizeAlgo()", e);
+                }
+            }
+        });
+        asyncThread.start();
+    }
 
 
-
-    private File saveFile(String recognizedText, AutoCompleteTextView actv, String[] languages, String[] expansions){
+    private File saveFile(String recognizedText, AutoCompleteTextView actv, String[] languages, String[] expansions) {
 
         //find expansion for file
         String langInput = actv.getText().toString();
@@ -133,8 +154,7 @@ public class TextActivity extends AppCompatActivity {
 
             Toast.makeText(TextActivity.this, "Saved to " + file.getPath(), Toast.LENGTH_SHORT).show();
 
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             Toast.makeText(TextActivity.this, "Error!", Toast.LENGTH_SHORT).show();
         }
         return file;

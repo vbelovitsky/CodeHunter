@@ -21,6 +21,8 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.text.FirebaseVisionText;
 import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
 
+import static com.kotlin.vbel.codehunter.TextActivity.RECOGNIZED_TEXT_KEY;
+
 public class ImageActivity extends Activity {
 
     @Override
@@ -103,7 +105,7 @@ public class ImageActivity extends Activity {
                         String recognizedText = result.getText();
                         if (recognizedText.equals("")) recognizedText = ERROR_MESSAGE;
                         Intent textActivityIntent = new Intent(ImageActivity.this, TextActivity.class);
-                        textActivityIntent.putExtra("recognizedText", recognizedText);
+                        textActivityIntent.putExtra(RECOGNIZED_TEXT_KEY, recognizedText);
                         startActivity(textActivityIntent);
                     }
                 })
@@ -112,7 +114,7 @@ public class ImageActivity extends Activity {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 Intent textActivityIntent = new Intent(ImageActivity.this, TextActivity.class);
-                                textActivityIntent.putExtra("recognizedText", ERROR_MESSAGE);
+                                textActivityIntent.putExtra(RECOGNIZED_TEXT_KEY, ERROR_MESSAGE);
                                 startActivity(textActivityIntent);
                             }
                         });
