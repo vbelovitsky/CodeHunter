@@ -3,6 +3,7 @@ package com.kotlin.vbel.codehunter;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
@@ -84,11 +85,11 @@ public class TextActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveFile(recognizedText, actv, languages, expansions);
+                String stringUri = saveFile(recognizedText, actv, languages, expansions);
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
 
-                sendIntent.putExtra(Intent.EXTRA_STREAM, );
+                sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(stringUri));
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
             }
