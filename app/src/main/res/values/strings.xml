@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">CodeHunter</string>
-    <string name="lang_hint">Type language (blank for txt)</string>
+    <string name="lang_hint">Type language or extension (blank for txt)</string>
+    <string name="suggestion">Guess it is...</string>
 
     <string-array name="languages">
         <item>Java=.java</item>

@@ -22,7 +22,7 @@
                  android:scaleType="centerCrop"
                  android:id="@+id/imageButtonLeft" app:layout_constraintStart_toStartOf="parent"
                  app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toStartOf="@+id/imageButtonCheck"
-                 android:layout_marginBottom="56dp" app:layout_constraintBottom_toBottomOf="parent"/>
+                 android:layout_marginBottom="64dp" app:layout_constraintBottom_toBottomOf="parent"/>
 
     <ImageButton android:layout_width="96dp" android:layout_height="96dp"
                  android:padding="10dp"
@@ -31,7 +31,7 @@
                  android:id="@+id/imageButtonCheck"
                  android:scaleType="centerCrop"
                  app:layout_constraintStart_toEndOf="@+id/imageButtonLeft" app:layout_constraintHorizontal_bias="0.5"
-                 app:layout_constraintEnd_toEndOf="parent" android:layout_marginBottom="56dp"
+                 app:layout_constraintEnd_toEndOf="parent" android:layout_marginBottom="64dp"
                  app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

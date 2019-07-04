@@ -52,12 +52,11 @@ public class ImageActivity extends Activity {
     }
 
     public void getMLTextFromImage(Bitmap bitmap) {
-        final String ERROR_MESSAGE = "Error, no text found";
-        String SAMSUNG_MESSAGE = "Samsung(((";
+        final String ERROR_MESSAGE = "No text found((";
+        String HARD_ERROR_MESSAGE = "Error with app permissions, my bad((";
 
         if (bitmap != null) {
             FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(bitmap);
-
             FirebaseVisionTextRecognizer textRecognizer = FirebaseVision.getInstance()
                     .getOnDeviceTextRecognizer();
 
@@ -78,7 +77,7 @@ public class ImageActivity extends Activity {
                                 }
                             });
         } else {
-            intentToTextActivity(SAMSUNG_MESSAGE);
+            intentToTextActivity(HARD_ERROR_MESSAGE);
         }
     }
 

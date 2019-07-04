@@ -11,9 +11,6 @@ import com.algorithmia.APIException;
 import com.algorithmia.AlgorithmException;
 import com.algorithmia.algo.AlgoResponse;
 import com.algorithmia.algo.Algorithm;
-import com.google.gson.JsonArray;
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -37,7 +34,7 @@ public class TextActivity extends AppCompatActivity {
         final String recognizedText = getIntent().getStringExtra(RECOGNIZED_TEXT_KEY);
         recognizedTextView.setText(recognizedText);
 
-        recognizeAlgo(recognizedText);
+
 
         String[] languages_data = getResources().getStringArray(R.array.languages);
         int len = languages_data.length;
@@ -54,6 +51,9 @@ public class TextActivity extends AppCompatActivity {
         final AutoCompleteTextView actv = findViewById(R.id.autoLanguage);
         actv.setThreshold(1);
         actv.setAdapter(adapter);
+
+        //important!
+        recognizeAlgo(recognizedText, languages_data, actv);
 
 
         //region Buttons
@@ -98,10 +98,11 @@ public class TextActivity extends AppCompatActivity {
 //                startActivity(sendIntent);
 //            }
 //        });
+        //endregion
     }
 
 
-    private void recognizeAlgo(final String text) {
+    private void recognizeAlgo(final String text, final String[] languages_data, final AutoCompleteTextView actv) {
         Thread asyncThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -127,9 +128,8 @@ public class TextActivity extends AppCompatActivity {
                                             chanceArray[i/2] = Double.parseDouble(dataArray[i]);
                                     }
 
-                                    TextView test = findViewById(R.id.testAlgo);
-                                    test.setText(langArray[0]);
-
+                                    //important!
+                                    setLang(langArray, chanceArray, languages_data, actv);
                                 }
 
                             } catch (AlgorithmException e) {
@@ -149,6 +149,42 @@ public class TextActivity extends AppCompatActivity {
     public static String capitalize(String str)
     {
         return str.substring(0, 1).toUpperCase() + str.substring(1);
+    }
+
+    private void setLang(String[] langArray, final Double[] chanceArray, String[] languages_data, AutoCompleteTextView actv){
+        TextView lang1 = findViewById(R.id.lang1);
+        TextView lang2 = findViewById(R.id.lang2);
+        TextView lang3 = findViewById(R.id.lang3);
+
+        if (Arrays.asList(languages_data).contains(langArray[0])) actv.setText(langArray[0]);
+        else if(Arrays.asList(languages_data).contains(langArray[1])) actv.setText(langArray[1]);
+        else if(Arrays.asList(languages_data).contains(langArray[2])) actv.setText(langArray[2]);
+
+        lang1.setText(langArray[0]);
+        lang2.setText(langArray[1]);
+        lang3.setText(langArray[2]);
+
+        lang1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String chanceInfo = "Probability: " + chanceArray[0].toString();
+                Toast.makeText(TextActivity.this, chanceInfo, Toast.LENGTH_SHORT).show();
+            }
+        });
+        lang2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String chanceInfo = "Probability: " + chanceArray[1].toString();
+                Toast.makeText(TextActivity.this, chanceInfo, Toast.LENGTH_SHORT).show();
+            }
+        });
+        lang3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String chanceInfo = "Probability: " + chanceArray[2].toString();
+                Toast.makeText(TextActivity.this, chanceInfo, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 

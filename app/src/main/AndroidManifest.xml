@@ -19,7 +19,8 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
-            tools:ignore="GoogleAppIndexingWarning">
+            tools:ignore="GoogleAppIndexingWarning"
+            android:windowSoftInputMode="stateHidden">
 
         <provider
                 android:name="androidx.core.content.FileProvider"
@@ -49,7 +50,8 @@
         </activity>
 
         <activity android:name=".TextActivity"
-                  android:screenOrientation="portrait">
+                  android:screenOrientation="portrait"
+                  android:windowSoftInputMode="adjustPan|adjustResize">
         </activity>
     </application>
 
