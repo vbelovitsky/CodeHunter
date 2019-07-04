@@ -8,14 +8,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
-import com.algorithmia.APIException;
-import com.algorithmia.Algorithmia;
-import com.algorithmia.AlgorithmiaClient;
-import com.algorithmia.algo.AlgoResponse;
-import com.algorithmia.algo.Algorithm;
 
-import java.io.File;
-import java.io.FileWriter;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -30,17 +24,6 @@ public class TextActivity extends AppCompatActivity {
         final TextView recognizedTextView = findViewById(R.id.recognizedText);
         final String recognizedText = getIntent().getStringExtra("recognizedText");
         recognizedTextView.setText(recognizedText);
-
-
-        AlgorithmiaClient client = Algorithmia.client("simHuy2KeDChHkrT9d6sCPeyZ/b1");
-        Algorithm langDetect = client.algo("PetiteProgrammer/ProgrammingLanguageIdentification/0.1.3");
-        langDetect.setTimeout(300L, java.util.concurrent.TimeUnit.SECONDS); //optional
-        try {
-            AlgoResponse result = langDetect.pipe(recognizedText);
-
-        } catch (APIException e) {
-            e.printStackTrace();
-        }
 
         String[] languages_data = getResources().getStringArray(R.array.languages);
         int len = languages_data.length;
@@ -59,6 +42,7 @@ public class TextActivity extends AppCompatActivity {
         actv.setAdapter(adapter);
 
 
+        //region Buttons
         ImageButton copyButton = findViewById(R.id.imageButtonCopy);
         ImageButton saveButton = findViewById(R.id.imageButtonSave);
         ImageButton sendButton = findViewById(R.id.imageButtonSend);
@@ -90,10 +74,11 @@ public class TextActivity extends AppCompatActivity {
                 sendIntent.setAction(Intent.ACTION_SEND);
 
                 sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(stringUri));
-                sendIntent.setType("text/plain");
+                sendIntent.setType("file/plain");
                 startActivity(sendIntent);
             }
         });
+        //endregion
 
     }
 
@@ -132,3 +117,5 @@ public class TextActivity extends AppCompatActivity {
     }
 
 }
+
+
