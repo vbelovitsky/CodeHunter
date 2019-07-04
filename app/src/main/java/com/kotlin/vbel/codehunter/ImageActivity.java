@@ -49,75 +49,47 @@ public class ImageActivity extends Activity {
             @Override
             public void onClick(View view) {
                 getMLTextFromImage(bitmap);
-                //Intent textActivityIntent = new Intent(ImageActivity.this, TextActivity.class);
-                //textActivityIntent.putExtra("recognizedText", recognizedText);
-                //startActivity(textActivityIntent);
             }
         });
 
     }
 
-    public String getTextFromImage(String imageURI){
-        String ERROR_MESSAGE = "Error";
-
-        Bitmap bitmap = BitmapFactory.decodeFile(imageURI);
-
-        TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
-
-        if(!textRecognizer.isOperational()){
-            Toast.makeText(getApplicationContext(), "Could no get the Text", Toast.LENGTH_SHORT).show();
-
-            return ERROR_MESSAGE;
-        }
-        else{
-            Frame frame = new Frame.Builder().setBitmap(bitmap).build();
-
-            SparseArray<TextBlock> items = textRecognizer.detect(frame);
-            StringBuilder sb = new StringBuilder();
-
-            for(int i = 0; i < items.size(); i++){
-                TextBlock myItem = items.valueAt(i);
-                sb.append(myItem.getValue());
-                sb.append("\n");
-            }
-
-            String recognizedText = sb.toString();
-            if (recognizedText.equals("")){recognizedText = ERROR_MESSAGE;}
-            return recognizedText;
-        }
-    }
-
-
     public void getMLTextFromImage(Bitmap bitmap){
         final String ERROR_MESSAGE = "Error, no text found";
+        String SAMSUNG_MESSAGE = "Samsung(((";
 
-        FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(bitmap);
+        if (bitmap != null) {
+            FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(bitmap);
 
-        FirebaseVisionTextRecognizer textRecognizer = FirebaseVision.getInstance()
-                .getOnDeviceTextRecognizer();
+            FirebaseVisionTextRecognizer textRecognizer = FirebaseVision.getInstance()
+                    .getOnDeviceTextRecognizer();
 
-        textRecognizer.processImage(image)
-                .addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
-                    @Override
-                    public void onSuccess(FirebaseVisionText result) {
-                        String recognizedText = result.getText();
-                        if (recognizedText.equals("")) recognizedText = ERROR_MESSAGE;
-                        Intent textActivityIntent = new Intent(ImageActivity.this, TextActivity.class);
-                        textActivityIntent.putExtra("recognizedText", recognizedText);
-                        startActivity(textActivityIntent);
-                    }
-                })
-                .addOnFailureListener(
-                        new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Intent textActivityIntent = new Intent(ImageActivity.this, TextActivity.class);
-                                textActivityIntent.putExtra("recognizedText", ERROR_MESSAGE);
-                                startActivity(textActivityIntent);
-                            }
-                        });
+            textRecognizer.processImage(image)
+                    .addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
+                        @Override
+                        public void onSuccess(FirebaseVisionText result) {
+                            String recognizedText = result.getText();
+                            if (recognizedText.equals("")) recognizedText = ERROR_MESSAGE;
+                            intentToTextActivity(recognizedText);
+                        }
+                    })
+                    .addOnFailureListener(
+                            new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    intentToTextActivity(ERROR_MESSAGE);
+                                }
+                            });
+        }
+        else{
+            intentToTextActivity(SAMSUNG_MESSAGE);
+        }
     }
 
-
+    private void intentToTextActivity(String recognizedText){
+        Intent textActivityIntent = new Intent(ImageActivity.this, TextActivity.class);
+        textActivityIntent.putExtra("recognizedText", recognizedText);
+        startActivity(textActivityIntent);
+    }
 
 }

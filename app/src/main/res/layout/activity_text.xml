@@ -27,6 +27,10 @@
 
     />
 
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+              android:id="@+id/testAlgo" app:layout_constraintTop_toBottomOf="@+id/autoLanguage"
+              android:layout_marginTop="36dp"/>
+
     <ImageButton android:layout_width="96dp" android:layout_height="96dp"
                  android:padding="12dp"
                  android:background="@drawable/round_button"
