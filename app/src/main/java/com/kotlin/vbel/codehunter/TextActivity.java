@@ -20,7 +20,7 @@ public class TextActivity extends AppCompatActivity {
         setContentView(R.layout.activity_text);
 
         final TextView recognizedTextView = findViewById(R.id.recognizedText);
-        String recognizedText = getIntent().getStringExtra("recognizedText");
+        final String recognizedText = getIntent().getStringExtra("recognizedText");
         recognizedTextView.setText(recognizedText);
 
         String[] languages_data = getResources().getStringArray(R.array.languages);
@@ -59,37 +59,7 @@ public class TextActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String mainText = recognizedTextView.getText().toString();
-
-                //find expansion for file
-                String langInput = actv.getText().toString();
-                String expansion = ".txt";
-                int index = Arrays.asList(languages).indexOf(langInput);
-
-                //expansion validation
-                if (!langInput.equals("")) {
-                    if (index != -1) {
-                        expansion = expansions[index];
-                    } else if (langInput.toCharArray()[0] == '.' && langInput.toCharArray().length > 1 && langInput.toCharArray().length <= 5) {
-                        expansion = langInput;
-                    }
-                }
-
-                //Create file and write recognized text in it
-                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                String fileName = "Code_" + timeStamp + expansion;
-                try {
-                    File file = new File(TextActivity.this.getExternalFilesDir("Code"), fileName);
-                    FileWriter fileWriter = new FileWriter(file);
-                    fileWriter.write(mainText);
-                    fileWriter.close();
-
-                    Toast.makeText(TextActivity.this, "Saved to " + file.getPath(), Toast.LENGTH_SHORT).show();
-                }
-                catch (Exception e){
-                    Toast.makeText(TextActivity.this, "Error!", Toast.LENGTH_SHORT).show();
-                }
-
+                saveFile(recognizedText, actv, languages, expansions);
             }
         });
 
@@ -100,6 +70,38 @@ public class TextActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void saveFile(String recognizedText, AutoCompleteTextView actv, String[] languages, String[] expansions){
+
+        //find expansion for file
+        String langInput = actv.getText().toString();
+        String expansion = ".txt";
+        int index = Arrays.asList(languages).indexOf(langInput);
+
+        //expansion validation
+        if (!langInput.equals("")) {
+            if (index != -1) {
+                expansion = expansions[index];
+            } else if (langInput.toCharArray()[0] == '.' && langInput.toCharArray().length > 1 && langInput.toCharArray().length <= 5) {
+                expansion = langInput;
+            }
+        }
+
+        //Create file and write recognized text in it
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String fileName = "Code_" + timeStamp + expansion;
+        try {
+            File file = new File(TextActivity.this.getExternalFilesDir("Code"), fileName);
+            FileWriter fileWriter = new FileWriter(file);
+            fileWriter.write(recognizedText);
+            fileWriter.close();
+
+            Toast.makeText(TextActivity.this, "Saved to " + file.getPath(), Toast.LENGTH_SHORT).show();
+        }
+        catch (Exception e){
+            Toast.makeText(TextActivity.this, "Error!", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

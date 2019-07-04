@@ -28,7 +28,6 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         ImageButton cameraButton = findViewById(R.id.imageButtonCamera);
         ImageButton galleryButton = findViewById(R.id.imageButtonGallery);
 
@@ -42,15 +41,17 @@ public class MainActivity extends Activity {
         galleryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String[] galleryPermissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                if (!EasyPermissions.hasPermissions(MainActivity.this, galleryPermissions)) {
+                    EasyPermissions.requestPermissions(MainActivity.this, "Access for storage",
+                            101, galleryPermissions);
+                }
+
                 imageFromGallery();
             }
         });
 
-        String[] galleryPermissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        if (!EasyPermissions.hasPermissions(this, galleryPermissions)) {
-            EasyPermissions.requestPermissions(this, "Access for storage",
-                    101, galleryPermissions);
-        }
+
 
     }
 
@@ -59,6 +60,7 @@ public class MainActivity extends Activity {
     }
 
     public void imageFromGallery() {
+
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(galleryIntent, GALLERY);
