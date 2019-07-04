@@ -13,6 +13,7 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.lang.Object;
 
 public class TextActivity extends AppCompatActivity {
 
@@ -30,7 +31,7 @@ public class TextActivity extends AppCompatActivity {
         final String[] languages = new String[len];
         final String[] expansions = new String[len];
 
-        for (int i = 0; i < len; i++){
+        for (int i = 0; i < len; i++) {
             String[] data = languages_data[i].split("=");
             languages[i] = data[0];
             expansions[i] = data[1];
@@ -49,7 +50,7 @@ public class TextActivity extends AppCompatActivity {
 
         copyButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                 String mainText = recognizedTextView.getText().toString();
                 String label = "CodeHunter";
@@ -66,23 +67,27 @@ public class TextActivity extends AppCompatActivity {
             }
         });
 
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String stringUri = saveFile(recognizedText, actv, languages, expansions);
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-
-                sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(stringUri));
-                sendIntent.setType("file/plain");
-                startActivity(sendIntent);
-            }
-        });
-        //endregion
-
+//        sendButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                File file = saveFile(recognizedText, actv, languages, expansions);
+//
+//
+//                Intent sendIntent = new Intent();
+//                sendIntent.setAction(Intent.ACTION_SEND);
+//
+//
+//                //filetypemap getcontenttype
+//                sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(file.getAbsolutePath()));
+//                StringBuilder type = new StringBuilder();
+//                type.append("file/*");
+//                sendIntent.setType(type.toString());
+//                startActivity(sendIntent);
+//            }
+//        });
     }
 
-    private String saveFile(String recognizedText, AutoCompleteTextView actv, String[] languages, String[] expansions){
+    private String saveFile(String recognizedText, AutoCompleteTextView actv, String[]languages, String[]expansions){
 
         //find expansion for file
         String langInput = actv.getText().toString();
@@ -101,20 +106,20 @@ public class TextActivity extends AppCompatActivity {
         //Create file and write recognized text in it
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String fileName = "Code_" + timeStamp + expansion;
+        final File file = new File(TextActivity.this.getExternalFilesDir("Code"), fileName);
         try {
-            final File file = new File(TextActivity.this.getExternalFilesDir("Code"), fileName);
             FileWriter fileWriter = new FileWriter(file);
             fileWriter.write(recognizedText);
             fileWriter.close();
 
             Toast.makeText(TextActivity.this, "Saved to " + file.getPath(), Toast.LENGTH_SHORT).show();
-            return file.getAbsolutePath();
-        }
-        catch (Exception e){
+
+        } catch (Exception e) {
             Toast.makeText(TextActivity.this, "Error!", Toast.LENGTH_SHORT).show();
         }
-        return "";
+        return file.getAbsolutePath();
     }
+
 
 }
 
