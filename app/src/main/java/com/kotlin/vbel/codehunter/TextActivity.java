@@ -35,7 +35,7 @@ public class TextActivity extends AppCompatActivity {
 
         AlgorithmiaClient client = Algorithmia.client("simHuy2KeDChHkrT9d6sCPeyZ/b1");
         Algorithm algo = client.algo("PetiteProgrammer/ProgrammingLanguageIdentification/0.1.3");
-        algo.setTimeout(300L, java.util.concurrent.TimeUnit.SECONDS); //optional
+        //algo.setTimeout(300L, java.util.concurrent.TimeUnit.SECONDS); //optional
         AlgoResponse result = null;
         try {
             result = algo.pipe(recognizedText);
