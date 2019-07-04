@@ -88,7 +88,7 @@ public class TextActivity extends AppCompatActivity {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
 
-                sendIntent.putExtra(Intent.EXTRA_STREAM, );
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "YES YES YS YES YES");
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
             }
