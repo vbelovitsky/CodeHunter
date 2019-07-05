@@ -78,21 +78,15 @@ public class TextActivity extends AppCompatActivity {
                 saveFile(recognizedText, actv, languages, expansions, true);
             }
         });
-        //TODO: 1 - УДАЛЕНИЕ
-        //      2 - ТЕКСТ ОКОЛО КНОПОК
-        //      3 - ПЕРЕРАБОТАТЬ TOAST ЧТОБЫ НЕ ПОКАЗЫВАЛ СОХРАНЕНИЕ : сделал, добавив boolean в safefile()
-        sendButton.setOnClickListener(new View.OnClickListener() {
+       sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String[] nameAndPath = saveFile(recognizedText, actv, languages, expansions, false);
-                String UriIntent = nameAndPath[0];
-                String fileName = nameAndPath[1];
-                Intent shareIntent = new Intent();
-                shareIntent.setAction(Intent.ACTION_SEND);
-                shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(UriIntent));
-                shareIntent.setType("*/*");
-                startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
-            }
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, recognizedText);
+                sendIntent.setType("text/plain");
+                startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.send_to)));
+           }
         });
     }
 
@@ -135,6 +129,7 @@ public class TextActivity extends AppCompatActivity {
                 } catch (APIException e) {
                     Log.e(TAG, "recognizeAlgo()", e);
                 }
+
             }
         });
         asyncThread.start();
