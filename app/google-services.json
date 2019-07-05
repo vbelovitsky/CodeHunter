@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "1014498726537",
-    "firebase_url": "https://codehunter-44369.firebaseio.com",
-    "project_id": "codehunter-44369",
-    "storage_bucket": "codehunter-44369.appspot.com"
+    "project_number": "20708085451",
+    "firebase_url": "https://codehunter-2a25e.firebaseio.com",
+    "project_id": "codehunter-2a25e",
+    "storage_bucket": "codehunter-2a25e.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1014498726537:android:f7a8cab12a55e236",
+        "mobilesdk_app_id": "1:20708085451:android:f7a8cab12a55e236",
         "android_client_info": {
           "package_name": "com.kotlin.vbel.codehunter"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1014498726537-bicll68mnq15hk5hff3nd3gb7r0g2nao.apps.googleusercontent.com",
+          "client_id": "20708085451-apkrvd0chtk668fgn7lqr3nl3eq6m7u0.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDTc59sZ9tWXCGlOC9siL4wNpU_Ejc1ZZw"
+          "current_key": "AIzaSyCfjhTOk8WR698MqEmfIANxlezr0yJHD64"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1014498726537-bicll68mnq15hk5hff3nd3gb7r0g2nao.apps.googleusercontent.com",
+              "client_id": "20708085451-apkrvd0chtk668fgn7lqr3nl3eq6m7u0.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
